@@ -22,8 +22,9 @@ function MyUsers() {
   } = useGlobalContext();
   // const [userDetails, setUserDetails] = useState({});
   const findUser = (id) => {
-    // const user = allUsers.find((e) => e._id === id);
+    // const user = adminDetails.allUsers.find((e) => e._id === id);
     // setUserDetails(user);
+    // console.log(userDetails);
   };
   const navigate = useNavigate();
   useEffect(() => {
@@ -41,7 +42,6 @@ function MyUsers() {
     changePage(1);
     navigate("/profile/transactions");
   };
-
   return (
     <Wrapper>
       <FormRowSelect

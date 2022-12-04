@@ -3,7 +3,6 @@ const { AIRTIME_RECEIPT, DATA_RECEIPT } = require("./TransactionReceipt");
 const Data = require("../Models/dataModel");
 
 const BUYAIRTIME = require("./APICALLS/Airtime/buyAirtime");
-const BUYELECTRICITY = require("./APICALLS/Electricity/buyElectricity");
 const BUYDATA = require("./APICALLS/Data/Data");
 const buyAirtime = async (req, res) => {
   const {
