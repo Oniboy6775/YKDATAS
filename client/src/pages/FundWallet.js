@@ -40,9 +40,16 @@ const FundWallet = () => {
           handleChange={handleInputChange}
           disabled={isValidated}
         />
-        <button type="submit" className="btn">
-          fund wallet
-        </button>
+        <div className="text-center mt-3">
+          <button type="submit" className="btn">
+            fund wallet
+          </button>
+        </div>
+        <div className="text-center mt-3 ">
+          <p className="p-0 m-0 mt-0 text-red-400">
+            Contact an admin to get one
+          </p>
+        </div>
       </form>
     </Wrapper>
   );
