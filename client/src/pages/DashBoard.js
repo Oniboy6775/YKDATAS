@@ -18,7 +18,7 @@ const DashBoard = () => {
 
   const copyReferralLink = async () => {
     await window.navigator.clipboard.writeText(
-      `https://www.datareloaded.com/register/${user.userName}`
+      `https://www.ykdatas.com/register/${user.userName}`
     );
     toast.success("Referral link copied");
   };
@@ -94,7 +94,7 @@ const DashBoard = () => {
           <section className="account__section " id="fundWallet">
             <div className="card">
               <h1 className="sub__title">
-                Account name <br /> DataReloaded-
+                Account name <br /> ykdatas-
                 {user.userName && user.userName.substring(0, 10)}
               </h1>
               <div className="content">
@@ -124,8 +124,8 @@ const DashBoard = () => {
             <div className="card">
               <h1 className="sub__title">refer a friend</h1>
               <div className="note">
-                Refer people to DataReloaded and earn ₦500 immediately the
-                person upgrade his/her account to Reseller.
+                Refer people to ykdatas and earn ₦500 immediately the person
+                upgrade his/her account to Reseller.
               </div>
               <button className="btn special__btn" onClick={copyReferralLink}>
                 Copy referral link
