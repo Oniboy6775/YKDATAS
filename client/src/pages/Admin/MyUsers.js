@@ -5,6 +5,7 @@ import FormInput from "../../components/FormInput";
 import Pagination from "../../components/Pagination";
 import { useGlobalContext } from "../../context/UserContext";
 import { useNavigate } from "react-router-dom";
+import moment from "moment";
 function MyUsers() {
   const {
     fetchUser,
@@ -22,9 +23,8 @@ function MyUsers() {
   } = useGlobalContext();
   // const [userDetails, setUserDetails] = useState({});
   const findUser = (id) => {
-    // const user = adminDetails.allUsers.find((e) => e._id === id);
+    // const user = allUsers.find((e) => e._id === id);
     // setUserDetails(user);
-    // console.log(userDetails);
   };
   const navigate = useNavigate();
   useEffect(() => {
@@ -42,29 +42,33 @@ function MyUsers() {
     changePage(1);
     navigate("/profile/transactions");
   };
+  const formattedDate = (date) => moment(date).format("LLL");
+
   return (
     <Wrapper>
-      <FormRowSelect
-        list={userTypeOptions}
-        handleChange={handleInputChange}
-        labelText="user type"
-        name="selectedUserType"
-        value={selectedUserType}
-      />
-      <FormInput
-        handleChange={handleInputChange}
-        labelText="userAccount"
-        name="userAccount"
-        value={userAccount}
-        placeholder="userName"
-      />
-      <FormInput
-        handleChange={handleInputChange}
-        labelText="phone Number"
-        name="phoneNumber"
-        value={phoneNumber}
-        placeholder="phone number"
-      />
+      <div className="sm:flex sm:m-auto">
+        <FormRowSelect
+          list={userTypeOptions}
+          handleChange={handleInputChange}
+          labelText="user type"
+          name="selectedUserType"
+          value={selectedUserType}
+        />
+        <FormInput
+          handleChange={handleInputChange}
+          labelText="userAccount"
+          name="userAccount"
+          value={userAccount}
+          placeholder="userName"
+        />
+        <FormInput
+          handleChange={handleInputChange}
+          labelText="phone Number"
+          name="phoneNumber"
+          value={phoneNumber}
+          placeholder="phone number"
+        />
+      </div>
       <button onClick={clearFilter} className="btn btn-block btn-danger">
         Clear filters
       </button>
@@ -73,14 +77,14 @@ function MyUsers() {
       <div className="users">
         {adminDetails.allUsers.map((e, index) => {
           const {
-            fullName,
+            // fullName,
             userName,
             userType,
             balance,
             phoneNumber,
             email,
             createdAt,
-            updatedAt,
+            // updatedAt,
             _id,
             reservedAccountBank,
             reservedAccountBank2,
@@ -95,10 +99,10 @@ function MyUsers() {
                 <p>Balance: #{balance.toFixed(2)}</p>
                 <p>phone number: {phoneNumber}</p>
                 <p>Account type: {userType}</p>
-                <p>full name: {fullName}</p>
+                {/* <p>full name: {fullName}</p> */}
                 <p>email: {email}</p>
-                <p>Joined on: {createdAt}</p>
-                <p>Last seen: {updatedAt}</p>
+                <p>Member since: {formattedDate(createdAt)}</p>
+                {/* <p>Last seen: {formattedDate(updatedAt)}</p> */}
                 <p>
                   {reservedAccountBank}: {reservedAccountNo}
                 </p>
