@@ -53,9 +53,9 @@ app.get("/api/v1/prices", async (req, res) => {
   }
 });
 
-if (process.env.NODE_ENV !== "production") {
-  app.use(morgan("dev"));
-}
+// if (process.env.NODE_ENV !== "production") {
+app.use(morgan("dev"));
+// }
 
 app.use("/api/v1/auth", usersRouter);
 app.use("/api/v1/buy", auth, purchaseRouter);
