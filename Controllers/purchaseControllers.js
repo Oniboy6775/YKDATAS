@@ -26,9 +26,9 @@ const buyAirtime = async (req, res) => {
   await User.updateOne({ _id: userId }, { $inc: { balance: -amountToCharge } });
   const { status, msg } = await BUYAIRTIME({ network, amount, mobile_number });
   let NETWORK = "";
-  if (network == "1") NETWORK = "AIRTEL";
-  if (network == "2") NETWORK = "MTN";
-  if (network == "3") NETWORK = "GLO";
+  if (network == "1") NETWORK = "MTN";
+  if (network == "2") NETWORK = "GLO";
+  if (network == "3") NETWORK = "AIRTEL";
   if (network == "4") NETWORK = "9MOBILE";
   if (status) {
     const receipt = await AIRTIME_RECEIPT({

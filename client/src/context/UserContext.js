@@ -365,9 +365,9 @@ export const AppProvider = ({ children }) => {
     dispatch({ type: START_LOADING });
     const { selectedNetwork, phoneNumber, amount } = state;
     let networkId;
-    if (selectedNetwork === "MTN") networkId = "2";
-    if (selectedNetwork === "AIRTEL") networkId = "1";
-    if (selectedNetwork === "GLO") networkId = "3";
+    if (selectedNetwork === "MTN") networkId = "1";
+    if (selectedNetwork === "GLO") networkId = "2";
+    if (selectedNetwork === "AIRTEL") networkId = "3";
     if (selectedNetwork === "9MOBILE") networkId = "4";
     try {
       const { data } = await authFetch.post("/buy/airtime", {
