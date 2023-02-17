@@ -15,14 +15,15 @@ const populate = async () => {
   try {
     await mongoose.connect(process.env.MONGODB_URI);
     console.log("DB connected");
-    await dataModel.deleteMany({});
-    await dataModel.create(MTN_SME);
-    await dataModel.create(GLO);
-    await dataModel.create(AIRTEL);
-    await dataModel.create(NMOBILE);
-    await cabletvModel.create(GOTV);
-    await cabletvModel.create(DSTV);
-    await cabletvModel.create(STARTIME);
+    // await dataModel.deleteMany({ plan_network: "GLO" });
+    // await dataModel.create(GLO);
+    // await dataModel.deleteMany({});
+    // await dataModel.create(MTN_SME);
+    // await dataModel.create(AIRTEL);
+    // await dataModel.create(NMOBILE);
+    // await cabletvModel.create(GOTV);
+    // await cabletvModel.create(DSTV);
+    // await cabletvModel.create(STARTIME);
     // await services.create(SERVICES);
 
     console.log("Success!!");

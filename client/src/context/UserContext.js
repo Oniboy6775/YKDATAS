@@ -553,6 +553,7 @@ export const AppProvider = ({ children }) => {
           users: data.users,
           totalUsers: data.totalUsers,
           totalPages: data.totalPages,
+          totalBalance: data.totalBalance,
         },
       });
     } catch (error) {

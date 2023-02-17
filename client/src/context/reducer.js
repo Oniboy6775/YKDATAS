@@ -62,13 +62,13 @@ const reducer = (state, action) => {
     };
   }
   if (action.type === FETCH_USER_SUCCESS) {
-    console.log(action.payload);
     return {
       ...state,
       isLoading: false,
       adminDetails: { ...state.adminDetails, allUsers: action.payload.users },
       numOfPages: action.payload.totalPages,
       totalUsers: action.payload.totalUsers,
+      totalBalance: action.payload.totalBalance,
       filteringTransactions: false,
     };
   }

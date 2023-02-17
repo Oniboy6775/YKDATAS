@@ -231,7 +231,18 @@ const searchUsers = async (req, res) => {
 
   let noOfUsers = await User.countDocuments(queryObject);
   const totalPages = Math.ceil(noOfUsers / limit);
-  res.status(200).json({ users: result, totalPages, totalUsers: noOfUsers });
+  // Total user balance
+  let allUser = await User.find().select("balance");
+  let allBalance = allUser.reduce((acc, curr) => {
+    acc += curr.balance;
+    return acc;
+  }, 0);
+  res.status(200).json({
+    users: result,
+    totalPages,
+    totalUsers: noOfUsers,
+    totalBalance: allBalance,
+  });
 };
 const updatePrice = async (req, res) => {
   if (req.user.userId !== process.env.ADMIN_ID)

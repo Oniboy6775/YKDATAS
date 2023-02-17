@@ -19,7 +19,9 @@ function MyUsers() {
     clearFilter,
     filteringTransactions,
     totalUsers,
+    totalBalance,
     changePage,
+    user,
   } = useGlobalContext();
   // const [userDetails, setUserDetails] = useState({});
   const findUser = (id) => {
@@ -73,7 +75,13 @@ function MyUsers() {
         Clear filters
       </button>
       <Pagination />
-      <h4 className="title">Total users :{totalUsers}</h4>
+      <div className="flex justify-between">
+        <h5>
+          Total balance:₦
+          {totalBalance && (totalBalance - user.balance).toFixed(2)}
+        </h5>
+        <h5>Total users:{totalUsers}</h5>
+      </div>
       <div className="users">
         {adminDetails.allUsers.map((e, index) => {
           const {
