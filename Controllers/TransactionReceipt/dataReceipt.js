@@ -8,6 +8,8 @@ const dataReceipt = async (payload) => {
     balance,
     userId,
     trans_Status,
+    apiResponse,
+    apiResponseId,
   } = payload;
 
   const newTransaction = Transaction({
@@ -21,6 +23,8 @@ const dataReceipt = async (payload) => {
     balance_After: balance - amountToCharge,
     trans_Date: `${new Date().toDateString()} ${new Date().toLocaleTimeString()}`,
     trans_Status: trans_Status,
+    apiResponse: apiResponse || "",
+    apiResponseId: apiResponseId || "",
     createdAt: Date.now(),
   });
 

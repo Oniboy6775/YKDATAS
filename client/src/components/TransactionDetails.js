@@ -1,15 +1,23 @@
 import React from "react";
 import styled from "styled-components";
 import { useGlobalContext } from "../context/UserContext";
-import { FaCopy, FaShareAltSquare } from "react-icons/fa";
+import { FaCopy, FaTimes } from "react-icons/fa";
 import { RiRefund2Fill } from "react-icons/ri";
 import moment from "moment";
 import { toast } from "react-toastify";
+import { TfiReload } from "react-icons/tfi";
+import { useNavigate } from "react-router-dom";
+
 function TransactionDetails({ close, details }) {
-  const { isAdmin, refund } = useGlobalContext();
+  const navigate = useNavigate();
+  const { isAdmin, refund, handleChange, isAgent } = useGlobalContext();
   const handleRefund = (id) => {
     refund(id);
     close();
+  };
+  const buyAgain = (number) => {
+    handleChange({ name: "phoneNumber", value: number });
+    navigate("/profile/buydata");
   };
   const {
     _id,
@@ -22,6 +30,8 @@ function TransactionDetails({ close, details }) {
     trans_Type,
     trans_amount,
     createdAt,
+    apiResponse,
+    paymentLink,
   } = details;
   let date = moment(createdAt);
   date = date.format("llll");
@@ -35,9 +45,14 @@ function TransactionDetails({ close, details }) {
       value: trans_Network,
     },
     {
-      name: "Token/username",
+      name: "response",
+      value: apiResponse || trans_Network,
+    },
+    {
+      name: "number",
       value: phone_number,
     },
+
     {
       name: "Date",
       value: date,
@@ -67,19 +82,30 @@ function TransactionDetails({ close, details }) {
   return (
     <Container>
       <TransactionDetailsContainer isBalanceIncrease={isBalanceIncrease}>
-        <button className="close__btn btn btn-danger" onClick={() => close()}>
+        <button className="close__btn btn btn-danger" onClick={close}>
           X
         </button>
-        <h1>Transaction details</h1>
-        <span className="transaction__amount">
-          ₦ {isBalanceIncrease ? "+" : "-"} {trans_amount}
+        <h4>Transaction details</h4>
+        <span
+          className={`font-extrabold text-3xl ${
+            isBalanceIncrease ? "text-green-700" : "text-red-500"
+          }`}
+        >
+          ₦ {isBalanceIncrease ? "+" : "-"} {trans_amount} <br />
+        </span>{" "}
+        <span
+          className={`capitalize font-bold ${
+            trans_Status === "success" ? "text-green-500" : "text-red-500"
+          }`}
+        >
+          {trans_Status}
         </span>
         {detailsArray.map((e, index) => {
           const { name, value } = e;
           return (
-            <div key={index} className="trans__container">
-              <div className="trans__name">{name}</div>
-              <div className="trans__value">
+            <div key={index} className="flex justify-between p-1">
+              <div className="font-extrabold uppercase">{name}</div>
+              <div className="font-bold capitalize text-right ">
                 {value}{" "}
                 {value === phone_number && (
                   <FaCopy onClick={() => copy(phone_number)} />
@@ -88,16 +114,25 @@ function TransactionDetails({ close, details }) {
             </div>
           );
         })}
-        <button
-          className="btn btn-danger"
-          onClick={() => {
-            window.print();
-          }}
-        >
-          <FaShareAltSquare /> Share
+        {trans_Type === "data" && (
+          <button className="btn" onClick={() => buyAgain(phone_number)}>
+            <TfiReload /> Buy again
+          </button>
+        )}
+        <button className="btn btn-danger" onClick={close}>
+          <FaTimes /> close
         </button>
-        {isAdmin &&
+        {paymentLink && (
+          <button
+            className="btn"
+            onClick={() => (window.location.href = paymentLink)}
+          >
+            Continue payment
+          </button>
+        )}
+        {(isAdmin || isAgent) &&
           trans_Status !== "refunded" &&
+          trans_Status !== "failed" &&
           trans_Type !== "transfer" &&
           trans_Type !== "wallet" &&
           trans_Type !== "refund" && (

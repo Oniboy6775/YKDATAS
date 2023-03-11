@@ -12,6 +12,8 @@ const transactionsSchema = new mongoose.Schema({
   balance_After: { type: Number, required: true },
   trans_Date: { type: String },
   trans_Status: { type: String },
+  apiResponse: { type: String },
+  apiResponseId: { type: String },
   createdAt: {
     type: Date,
     default: Date.now,

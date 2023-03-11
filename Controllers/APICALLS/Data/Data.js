@@ -17,11 +17,15 @@ const BUYDATA = async ({ network, mobile_number, plan }) => {
     );
     return {
       status: true,
-      msg: "Airtime purchase successful",
+      msg: BuyDataResponse.data.msg || "Data Purchase successful",
       data: BuyDataResponse.data.receipt,
     };
   } catch (error) {
-    return { status: false };
+    console.log(error.response.data);
+    return {
+      status: false,
+      msg: error.response.data.msg || "Transaction failed",
+    };
   }
 };
 module.exports = BUYDATA;

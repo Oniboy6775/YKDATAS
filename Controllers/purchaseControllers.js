@@ -85,9 +85,10 @@ const buyData = async (req, res) => {
   let isSuccess = false;
 
   const { status, data, msg } = await BUYDATA({ ...req.body });
-  message = msg;
+
   isSuccess = status;
   if (status) {
+    console.log({ ...data });
     receipt = await DATA_RECEIPT({
       ...data,
       amountToCharge,
@@ -97,14 +98,14 @@ const buyData = async (req, res) => {
     });
   }
   if (isSuccess) {
-    res.status(200).json({ msg: message, receipt });
+    res.status(200).json({ msg, receipt });
   } else {
     await User.updateOne(
       { _id: userId },
       { $inc: { balance: +amountToCharge } }
     );
     return res.status(500).json({
-      msg: message || "Transaction failed",
+      msg: msg || "Transaction failed",
     });
   }
 };
