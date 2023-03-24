@@ -122,6 +122,20 @@ export const AppProvider = ({ children }) => {
     selectedUserType: "",
     totalUsers: "",
     couponCode: "",
+    totalSales: 0,
+    totalProfit: 0,
+    productList: ["MTN", "MTN-CG", "GLO", "AIRTEL", "9MOBILE"],
+    selectedProduct: "MTN",
+    transactionStatusList: [
+      "all",
+      "success",
+      "failed",
+      "processing",
+      "pending",
+      "refunded",
+    ],
+    selectedTransactionStatus: "all",
+    transactionFrom: "",
   };
   const [state, dispatch] = useReducer(reducer, initialState);
 
@@ -482,29 +496,54 @@ export const AppProvider = ({ children }) => {
   const fetchTransaction = async () => {
     const {
       isAdmin,
+      isAgent,
       phoneNumber,
       selectedTransactionFilter,
       page,
       userAccount,
+      transactionFrom,
+      transactionTo,
+      selectedTransactionStatus,
     } = state;
     let endPoint = "/transaction?";
     if (phoneNumber) {
       endPoint = `${endPoint}phoneNumber=${phoneNumber}`;
       // changePage(1);
     }
-    if (userAccount && isAdmin)
+    if ((userAccount && isAdmin) || isAgent)
       endPoint = endPoint + `&userName=${userAccount}`;
     if (selectedTransactionFilter && selectedTransactionFilter !== "all") {
       endPoint = endPoint + `&type=${selectedTransactionFilter}`;
     }
     if (page) endPoint = endPoint + `&page=${page}`;
+    if (selectedTransactionStatus)
+      endPoint = endPoint + `&status=${selectedTransactionStatus}`;
+    if (transactionFrom) {
+      endPoint =
+        endPoint +
+        `&from=${transactionFrom}` +
+        `&to=${transactionTo || new Date()}`;
+    }
+
     dispatch({ type: FILTER_TRANSACTION_BEGIN });
     try {
       const { data } = await authFetch(endPoint);
-      const { noOfTransaction, transactions, totalPages } = data;
+      const {
+        noOfTransaction,
+        transactions,
+        totalPages,
+        totalSales,
+        totalProfit,
+      } = data;
       dispatch({
         type: FILTER_TRANSACTION_SUCCESS,
-        payload: { transactions, noOfTransaction, totalPages },
+        payload: {
+          transactions,
+          noOfTransaction,
+          totalPages,
+          totalSales,
+          totalProfit,
+        },
       });
     } catch (error) {
       // dispatch({ type: STOP });
@@ -709,7 +748,22 @@ export const AppProvider = ({ children }) => {
       toast.error(error.response.data.msg);
     }
   };
-
+  const updateCostPrice = async (costPrice) => {
+    dispatch({ type: START_LOADING });
+    try {
+      const { data } = await authFetch.post("/admin/costPrice", {
+        network: state.selectedProduct,
+        costPrice,
+      });
+      dispatch({
+        type: STOP_LOADING,
+      });
+      toast.success(data.msg);
+    } catch (error) {
+      dispatch({ type: STOP_LOADING });
+      toast.error(error.response.data.msg);
+    }
+  };
   const clearFilter = () => {
     dispatch({ type: CLEAR_FILTER });
   };
@@ -746,6 +800,7 @@ export const AppProvider = ({ children }) => {
         refund,
         validateMeter,
         updatePrice,
+        updateCostPrice,
       }}
     >
       {children}

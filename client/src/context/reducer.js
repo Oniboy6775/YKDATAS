@@ -156,6 +156,8 @@ const reducer = (state, action) => {
       numOfPages: action.payload.totalPages,
       totalTransactions: action.payload.noOfTransaction,
       transactions: action.payload.transactions,
+      totalSales: action.payload.totalSales,
+      totalProfit: action.payload.totalProfit,
     };
   }
   if (action.type === CHANGE_PAGE) {

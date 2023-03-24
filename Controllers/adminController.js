@@ -270,6 +270,17 @@ const updatePrice = async (req, res) => {
     res.status(500).json({ msg: "An error occur" });
   }
 };
+const updateCostPrice = async (req, res) => {
+  const { network, costPrice } = req.body;
+  try {
+    await CostPrice.updateOne({ network }, { $set: { costPrice } });
+    res
+      .status(200)
+      .json({ msg: `${network} cost price updated to ${costPrice}` });
+  } catch (error) {
+    res.status(500).json({ msg: "Something went wrong" });
+  }
+};
 module.exports = {
   adminDetails,
   generateCoupon,
@@ -278,4 +289,5 @@ module.exports = {
   updateAvailableServices,
   searchUsers,
   updatePrice,
+  updateCostPrice,
 };

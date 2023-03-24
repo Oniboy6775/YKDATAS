@@ -2,12 +2,11 @@ import React from "react";
 import styled from "styled-components";
 import { useGlobalContext } from "../context/UserContext";
 import { FaCopy, FaTimes } from "react-icons/fa";
+import { TfiReload } from "react-icons/tfi";
 import { RiRefund2Fill } from "react-icons/ri";
 import moment from "moment";
 import { toast } from "react-toastify";
-import { TfiReload } from "react-icons/tfi";
 import { useNavigate } from "react-router-dom";
-
 function TransactionDetails({ close, details }) {
   const navigate = useNavigate();
   const { isAdmin, refund, handleChange, isAgent } = useGlobalContext();
@@ -24,20 +23,20 @@ function TransactionDetails({ close, details }) {
     balance_After,
     balance_Before,
     phone_number,
-    trans_Id,
     trans_Network,
     trans_Status,
     trans_Type,
     trans_amount,
     createdAt,
-    apiResponse,
     paymentLink,
+    trans_UserName,
+    apiResponse,
   } = details;
   let date = moment(createdAt);
   date = date.format("llll");
   const detailsArray = [
     {
-      name: "TRANSACTION TYPE",
+      name: "type",
       value: trans_Type,
     },
     {
@@ -46,20 +45,15 @@ function TransactionDetails({ close, details }) {
     },
     {
       name: "response",
-      value: apiResponse || trans_Network,
+      value: apiResponse || `${trans_Network} ${trans_Type}`,
     },
     {
-      name: "number",
+      name: "Number",
       value: phone_number,
     },
-
     {
       name: "Date",
       value: date,
-    },
-    {
-      name: "Status",
-      value: trans_Status,
     },
     {
       name: "Old balance",
@@ -70,8 +64,8 @@ function TransactionDetails({ close, details }) {
       value: balance_After.toFixed(2),
     },
     {
-      name: "Transaction Id",
-      value: trans_Id,
+      name: "User",
+      value: trans_UserName,
     },
   ];
   const isBalanceIncrease = balance_After > balance_Before;
@@ -164,7 +158,7 @@ const TransactionDetailsContainer = styled.div`
   max-width: 400px;
   width: 80%;
   height: fit-content;
-  padding: 1rem 2rem;
+  padding: 1rem;
   border-radius: var(--borderRadius);
   transition: var(--transition);
   border: 2px solid var(--primary-500);
@@ -180,7 +174,8 @@ const TransactionDetailsContainer = styled.div`
   .transaction__amount {
     font-weight: 900;
     font-size: 2rem;
-    color: ${({ isBalanceIncrease }) => (isBalanceIncrease ? "green" : "red")};
+    /* color: ${({ isBalanceIncrease }) =>
+      isBalanceIncrease ? "green" : "red"}; */
   }
   .trans__container {
     display: flex;
@@ -193,10 +188,7 @@ const TransactionDetailsContainer = styled.div`
     font-weight: 900;
     min-width: fit-content;
   }
-  .trans__value {
-    font-weight: 700;
-    font-size: 1rem;
-  }
+
   svg {
     font-size: x-large;
   }

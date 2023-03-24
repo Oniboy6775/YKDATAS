@@ -1,6 +1,9 @@
 const User = require("../Models/usersModel");
 const { AIRTIME_RECEIPT, DATA_RECEIPT } = require("./TransactionReceipt");
 const Data = require("../Models/dataModel");
+const generateReceipt = require("./generateReceipt");
+const CostPrice = require("../Models/costPriceModel");
+const { v4: uuid } = require("uuid");
 
 const BUYAIRTIME = require("./APICALLS/Airtime/buyAirtime");
 const BUYDATA = require("./APICALLS/Data/Data");
@@ -70,7 +73,7 @@ const buyData = async (req, res) => {
     plan_type,
     my_price,
     plan: dataVolume,
-    month_validate,
+    volumeRatio,
   } = dataTobuy;
 
   let amountToCharge = my_price;
@@ -84,17 +87,46 @@ const buyData = async (req, res) => {
   let receipt = {};
   let isSuccess = false;
 
+  let NETWORK = "";
+  if (network == "1") NETWORK = "MTN";
+  if (network == "2") NETWORK = "GLO";
+  if (network == "3") NETWORK = "AIRTEL";
+  if (network == "6") NETWORK = "9MOBILE";
+  // Checking the cost price of the data
+  let { costPrice } = await CostPrice.findOne({ network: NETWORK });
+  if (NETWORK === "MTN" && plan_type == "CG") {
+    const { costPrice: CG_COST_PRICE } = await CostPrice.findOne({
+      network: "MTN-CG",
+    });
+    costPrice = CG_COST_PRICE;
+  }
   const { status, data, msg } = await BUYDATA({ ...req.body });
 
   isSuccess = status;
   if (status) {
     console.log({ ...data });
-    receipt = await DATA_RECEIPT({
-      ...data,
+    receipt = await generateReceipt({
+      // ...data,
+      // amountToCharge,
+      // userId,
+      // mobile_number,
+      // balance,
+      // userName: user.userName,
+      // type: "data",
+      // costPrice,
+      transactionId: uuid(),
+      planNetwork: NETWORK,
+      planName: `${plan_type} ${dataVolume}`,
+      phoneNumber: mobile_number,
+      status: "success",
       amountToCharge,
-      userId,
-      mobile_number,
       balance,
+      userId,
+      userName: user.userName,
+      type: "data",
+      volumeRatio: volumeRatio,
+      costPrice,
+      ...data,
     });
   }
   if (isSuccess) {
