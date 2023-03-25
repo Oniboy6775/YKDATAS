@@ -174,6 +174,9 @@ const reducer = (state, action) => {
       pageNumber: "1",
       page: "1",
       userAccount: "",
+      transactionFrom: "",
+      transactionTo: "",
+      selectedTransactionStatus: "all",
     };
   }
   if (action.type === VALIDATE_SUCCESS) {
